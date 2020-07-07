@@ -1,0 +1,280 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+struct BookIofo{
+	char name[20];
+	char author[20];
+	float price;
+	int count;
+	struct BookIofo *next;
+};
+typedef struct BookIofo Book;
+void printmanu();
+Book* load();
+Book* addnode(Book *h,Book *p);
+void browsenode(Book *h);
+void save(Book *h);
+void lookup(Book *h,char *name);
+Book* del(Book *h);
+void update(Book *h);
+void destory(Book *h);
+int main()
+{
+	int op;
+	printmanu();
+	Book *head,*p;
+	char name[20];
+	p=head=NULL;
+	scanf("%d",&op);
+	while(op)
+	{
+		switch(op)
+		{
+			case 1:
+					head=load();
+					break;
+			case 2:
+					browsenode(head);
+					break;
+			case 3:
+					{
+						printf("please puts name author price count\n");
+						p=(Book*)malloc(sizeof(Book));
+						p->next=NULL;
+						scanf("%s%s%f%d",p->name,p->author,&(p->price),&(p->count));
+						addnode(head,p);
+					}
+					break;
+			case 4:
+					head=del(head);
+					break;
+			case 5:
+					update(head);
+					break;
+			case 6:
+					{
+						printf("please puts lookup Bookname\n");getchar();
+						gets(name);
+						lookup(head,name);
+					};
+					break;
+			case 7:
+					save(head);
+					break;
+		}
+		printmanu();
+		scanf("%d",&op);
+	}
+	if(!op)
+	{
+		destory(head);
+	}
+	return 0;
+}
+void printmanu()
+{
+	printf("*****************************************\n");
+	printf("**    please  select  a  operation     **\n");
+	printf("**  1:Load    2:browse	3:add	4:del  **\n");
+	printf("**  5:update  6:lookup	7:save	0:exit **\n");
+	printf("*****************************************\n");
+}
+Book* load()
+{
+	FILE *fp;
+	char name[20],author[20];
+	float price;
+	int count;
+	Book *p,*head;
+	p=head=NULL;
+	fp=fopen("c:\\BOOK\\book.txt","r");
+	if(fp==NULL)
+	{
+		puts("open file error\n");
+		exit(0);
+	}
+	while(!feof(fp))
+	{
+		fscanf(fp,"%s	%s	%f	%d",name,author,&price,&count);
+		p=(Book*)malloc(sizeof(Book));
+		p->next=NULL;
+		strcpy(p->name,name);
+		strcpy(p->author,author);
+		p->price=price;
+		p->count=count;
+		head=addnode(head,p);
+	}
+	if(!fclose(fp)==0)
+	{
+		puts("fclose error\n");
+		exit(0);
+	}
+	puts("Load success\n");
+	return head;
+}
+Book* addnode(Book *h,Book *p)
+{
+	Book *tail;
+	tail=h;
+	if(h==NULL)
+		h=p;
+	else
+	{
+		while(tail->next!=NULL)
+		{
+			tail=tail->next;
+		}
+		tail->next=p;
+	}
+	return h;
+}
+void browsenode(Book *h)
+{
+	printf("name	author	price	count\n");
+	while(h!=NULL)
+	{
+		printf("%s	%s	%.2f	%d\n",h->name,h->author,h->price,h->count);
+		h=h->next;
+	}	
+}
+void save(Book *h)
+{
+	FILE *fp;
+	Book *p;
+	p=NULL;
+	p=h;
+	fp=fopen("c:\\BOOK\\book.txt","w");
+	if(fp==NULL)
+	{
+		puts("open file error\n");
+		exit(0);
+	}
+	while(p->next!=NULL)
+	{
+		fprintf(fp,"%s	%s	%.2f	%d\n",p->name,p->author,p->price,p->count);
+		p=p->next;
+	}
+	fprintf(fp,"%s	%s	%.2f	%d",p->name,p->author,p->price,p->count);
+		if(!fclose(fp)==0)
+	{
+		puts("fclose error\n");
+		exit(0);
+	}
+	puts("save success\n");
+}
+
+void lookup(Book *h,char *name)
+{
+	Book *p;
+	int flag=0;
+	p=h;
+	while(p!=NULL)
+	{
+		if(strcmp(p->name,name)==0)
+		{
+			printf("find the book\n");
+			printf("Bookname:%s  Author:%s  price:%f  count:%d\n",p->name,p->author,p->price,p->count);
+			flag=1;
+		}
+
+		p=p->next;
+	}
+	if(!flag)
+	{
+		printf("NOT FOUND\n");
+	}
+}
+Book* del(Book *h)
+{
+	char name[20];
+	printf("please puts del Bookname\n");getchar();
+	gets(name);
+	Book *a,*b;	
+	a=h;b=h->next;
+	int flag=0;
+	if(a==NULL)
+	{
+		puts("not date\n");
+		
+	}
+
+	if(strcmp(a->name,name)==0)
+	{
+		h=b;
+		free(a);
+		return h;
+	}
+	while(b!=NULL)
+	{
+		if(strcmp(b->name,name)==0)
+		{
+			a->next=b->next;
+			free(b);
+			flag=1;
+		}
+		a=b;
+		b=b->next;
+	}
+	if(!flag)
+	{
+		puts("NOT FOUND\n");
+	}
+	else
+	{
+		puts("del sucess\n");
+	}
+	return h;
+}
+void update(Book *h)
+{
+	Book *p;
+	p=h;
+	int flag=0;
+	char name[20];
+	puts("input update datename");
+	scanf("%s",name);
+	while(p!=NULL)
+	{
+		if(strcmp(p->name,name)==0)
+		{
+			printf("FOUND\n");
+			puts("input name");
+			fflush(stdin);
+			gets(p->name);
+			puts("input author");
+			fflush(stdin);
+			gets(p->author);
+			puts("input price");
+			scanf("%f",&(p->price));
+			puts("input count");
+			scanf("%d",&(p->count));
+			flag=1;
+		}
+		p=p->next;
+	}
+	if(!flag)
+	{
+		printf("NOT FOUND\n");
+	}
+}
+void destory(Book *h)
+{
+	Book *p;
+	int t;
+	p=h;
+	puts("save or not:  1:save 0:not");
+	scanf("%d",&t);
+	if(t)
+	{
+		save(h);
+		destory(h);
+	}
+	else
+	{
+		while(p!=NULL)
+		{
+			free(h);
+			h=p;
+		}
+	}
+}
