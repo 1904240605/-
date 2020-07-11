@@ -1,0 +1,21 @@
+#include<bits/stdc++.h> 
+using namespace std;
+int gcd(int m,int n)
+{
+	if(n==0)return m;
+	else gcd(n,m%n);
+}
+int main()
+{
+	int m,n;
+	cin>>m>>n;
+	int t=gcd(m,n%m);
+	cout<<t<<endl;
+	return 0;
+}
+/*
+m=n*c+r 设m和n的最大公约数为k，且m=k*d1,n=k*d2 
+则r=m-n*c=k*d1-k*d2*c=k(d1-c*d2)
+有r也是k的倍数 
+所以n和r的最大公约数是m和n的最大公约数 
+*/
