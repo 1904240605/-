@@ -1,0 +1,22 @@
+//三个数除以m得到相同的余数，求m最大的数值
+/*
+同余定理
+给定一个正整数m，如果两个整数a和b满足a-b能够被m整除，
+即(a-b)/m得到一个整数，那么就称整数a与b对模m同余，记作a≡b(mod m)。 
+*/
+#include<bits/stdc++.h> 
+using namespace std;
+int main()
+{
+	int a,b;
+	cin>>a>>b;
+	int ans=max(a,b)-min(a,b);
+	for(int i=min(a,b);i>=1;i--)
+	{
+		if(ans%i==0)//a,b同余，则a-b整除m 
+		{
+			cout<<i<<endl;
+			return 0;
+		}
+	}
+}
