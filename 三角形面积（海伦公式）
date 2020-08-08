@@ -1,0 +1,35 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main()
+{
+	//输入n组
+	int n;
+	double a[3];
+
+	cout << "Input number:";
+	cin >> n;
+
+	while(n--){  //每次输入一组
+
+		for(int i=0; i<3; i++)
+			cin >> a[i];
+
+		double a1=a[0];
+		double b=a[1];
+		double c=a[2];
+		double p=(a1+b+c)/2;
+
+		if(a1+b<=c || a1+c<=b || b+c<=a1){
+			cout << "0.00" << endl;
+		}
+		else if(a1-b>=c || a1-c>=b || b-c>=a1){
+			cout << "0.00" << endl;
+		}
+		else{
+			double s=sqrt(p*(p-a1)*(p-b)*(p-c));
+		    printf("%.3f",s);
+		}
+	}
+
+	return 0;
+}
