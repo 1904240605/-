@@ -1,0 +1,33 @@
+ //判断两个链表是否相交，若相交求交点（链表不带环）
+ /*
+ 两个链表相交是什么情况，也就是一个链表的尾节点指向另一个节点的任意一个节点，则说明两个链表相交 
+如何判断两个链表相交，我们同样可以使用快慢指针来解决。
+先求两个链表的节点数，再创建两个指针，让他们分别指向两个链表的头节点，指向长链表的为fast，指向短链表的为slow。
+然后让fast先走两链表节点数之差步。
+判断两个指针是否会相等，相等则说明两个链表相交，此时相交点就是fast和slow所指的节点。
+ */
+ LinkNode* HasCross(LinkNode* head1,LinkNode* head2){
+      if(head1 == NULL || head2 == NULL){
+          return NULL;
+      }
+      size_t size1 = LinkListSize(head1);
+      size_t size2 = LinkListSize(head2);
+      LinkNode* cur1 = head1;
+      LinkNode* cur2 = head2;
+      if(size1 < size2){
+          size_t i = 0;
+          for(; i < size2 - size1; i++){
+              cur1 = cur1 -> next;
+          }
+      }else{
+          size_t i = 0;
+          for(; i < size1 - size2; i++){
+              cur2 = cur2 -> next;
+          }
+      }
+      while(cur1 != cur2){
+          cur1 = cur1 -> next;
+          cur2 = cur2 -> next;
+      }
+      return cur1;
+  }
