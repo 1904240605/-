@@ -1,0 +1,37 @@
+/**
+将一个单链表拆分为3个单链表
+假设有一个带头节点的单链表L，每个节点值由单个数字、小写字母和大写字母构成。设计一个算法将其拆分成3个带头节点的单链表L1、L2和L3，L1包含L中的所有数字节点，
+L2包含L中的所有小写字母节点，L3包含L中的所有大写字母节点。
+**/
+void split(LinkList *&L, LinkList *&L1, LinkList *&L2, LinkList *&L3)
+{
+    LinkList *p = L->next, *r1, *r2， * r3;
+    L1 = (LinkList *)malloc(sizeof(LinkList));
+    L2 = (LinkList *)malloc(sizeof(LinkList));
+    L3 = (LinkList *)malloc(sizeof(LinkList));
+    r1 = L1;
+    r2 = L2;
+    r3 = L3;
+    while (p != NULL)
+    {
+        if (p->str >= 'a' && p->str <= 'z')
+        {
+            r2->next = p;
+            r2 = p;
+        }
+        else if (p->str >= 'A' && p->str <= 'Z')
+        {
+            r3->next = p;
+            r3 = p;
+        }
+        else
+        {
+            r1->next = p;
+            r1 = p;
+        }
+        p = p->next;
+    }
+    r1->next = NULL;
+    r2->next = NULL;
+    r3->next = NULL;
+}
